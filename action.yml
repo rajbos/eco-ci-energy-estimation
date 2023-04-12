@@ -245,9 +245,9 @@ runs:
             fi
 
             echo "$label: " >> $GITHUB_STEP_SUMMARY
-            echo "🖥 avg. CPU utilization [%]:" >> $GITHUB_STEP_SUMMARY
-            awk '{ total += $1; count++ } END { print total/count }' /tmp/eco-ci/cpu-util.txt >> $GITHUB_STEP_SUMMARY
-            
+            avgCPU=awk '{ total += $1; count++ } END { print total/count }' /tmp/eco-ci/cpu-util-total.txt
+            echo "🖥 avg. CPU utilization [%]:$avgCPU" >> $GITHUB_STEP_SUMMARY      
+
             echo "🔋 Total Energy [Joules] :" >> $GITHUB_STEP_SUMMARY
             total_energy=$(awk '{sum+=$1} END {print sum}' /tmp/eco-ci/energy.txt)
             echo ${total_energy} >> /tmp/eco-ci/energy-values.txt
@@ -268,6 +268,9 @@ runs:
 
                 curl -X POST "$add_endpoint" -H 'Content-Type: application/json' -d "{\"value\":\"$value_mJ\",\"unit\":\"$unit\",\"repo\":\"${{ github.repository }}\",\"branch\":\"${{ inputs.branch }}\",\"workflow\":\"$ECO_CI_WORKFLOW_ID\",\"run_id\":\"${{ github.run_id }}\",\"project_id\":\"\",\"label\":\"$label\", \"source\":\"github\"}"
             fi
+            
+            # store values as application/json
+            echo "values={\"avgCPU\": $avgCPU}" >> $GITHUB_OUTPUT
 
             killall -9 -q /tmp/eco-ci/demo-reporter || true
             /tmp/eco-ci/demo-reporter | tee -a /tmp/eco-ci/cpu-util-total.txt > /tmp/eco-ci/cpu-util.txt &
@@ -327,6 +330,3 @@ runs:
             echo "See energy runs here:" >> $GITHUB_STEP_SUMMARY
             echo "${metrics_url}/ci.html?repo=${repo_enc}&branch=${branch_enc}&workflow=$ECO_CI_WORKFLOW_ID" >> $GITHUB_STEP_SUMMARY
         fi
-
-        # store values as application/json
-        echo "values={\"avgCPU\": $avgCPU}" >> $GITHUB_OUTPUT
