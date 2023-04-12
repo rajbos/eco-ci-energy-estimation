@@ -38,9 +38,14 @@ jobs:
 
       - name: Eco CI Energy Estimation
         uses: ./
-        id: eco-ci
         with:
           task: final-measurement
+
+      - name: Eco CI Energy Estimation
+        uses: ./
+        id: eco-ci
+        with:
+          task: display-results
 
       - name: Check json output
         run: |
