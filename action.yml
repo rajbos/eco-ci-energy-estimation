@@ -245,7 +245,7 @@ runs:
             fi
 
             echo "$label: " >> $GITHUB_STEP_SUMMARY
-            avgCPU=awk '{ total += $1; count++ } END { print total/count }' /tmp/eco-ci/cpu-util-total.txt
+            avgCPU=$(awk '{ total += $1; count++ } END { print total/count }' /tmp/eco-ci/cpu-util-total.txt)
             echo "🖥 avg. CPU utilization [%]:$avgCPU" >> $GITHUB_STEP_SUMMARY      
 
             echo "🔋 Total Energy [Joules] :" >> $GITHUB_STEP_SUMMARY
