@@ -32,13 +32,13 @@ jobs:
 
       - name: Test measurement
         uses: ./
+        id: eco-ci
         with:
           task: get-measurement
           label: "Sleep"
 
       - name: Eco CI Energy Estimation
         uses: ./
-        id: eco-ci
         with:
           task: final-measurement
 
