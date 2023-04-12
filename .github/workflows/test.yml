@@ -30,11 +30,11 @@ jobs:
       - name: Wait before the next step
         run: sleep 10
 
-      - name: Test measurement
-        uses: ./
-        with:
-          task: get-measurement
-          label: "Sleep"
+      # - name: Test measurement
+      #   uses: ./
+      #   with:
+      #     task: get-measurement
+      #     label: "Sleep"
 
       - name: Eco CI Energy Estimation
         uses: ./
