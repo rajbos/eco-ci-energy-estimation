@@ -45,3 +45,4 @@ jobs:
       - name: Check json output
         run: |
           echo "Energy consumption: ${{ steps.eco-ci.outputs.values }}"
+          echo "Energy consumption: ${{ steps.eco-ci.outputs.avgCPU }}"

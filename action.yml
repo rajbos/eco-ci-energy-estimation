@@ -16,6 +16,14 @@ inputs:
     description: 'Send metrics data to metrics.green-coding.berlin to create and display badge, and see an overview of the energy of your CI runs. Set to false to send no data.'      
     default: true
     required: false
+outputs:
+  avgCPU:
+    description: 'Average CPU utilization of the CI run'
+    value: ${{ steps.run-lap-model.outputs.avgCPU }}
+  values:
+    description: 'All report values in JSON format'
+    value: ${{ steps.run-lap-model.outputs.values }}
+
 runs:
   using: 'composite'
   steps:
@@ -271,6 +279,7 @@ runs:
             
             # store values as application/json
             echo "values={\"avgCPU\": $avgCPU}" >> $GITHUB_OUTPUT
+            echo "avgCPU=$avgCPU" >> $GITHUB_OUTPUT
 
             killall -9 -q /tmp/eco-ci/demo-reporter || true
             /tmp/eco-ci/demo-reporter | tee -a /tmp/eco-ci/cpu-util-total.txt > /tmp/eco-ci/cpu-util.txt &
