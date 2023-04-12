@@ -38,5 +38,10 @@ jobs:
 
       - name: Eco CI Energy Estimation
         uses: ./
+        id: eco-ci
         with:
           task: final-measurement
+
+      - name: Check json output
+        run: |
+          echo "Energy consumption: ${{ steps.eco-ci.outputs.values }}"

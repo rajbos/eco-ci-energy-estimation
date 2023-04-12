@@ -295,8 +295,9 @@ runs:
         fi
 
         echo 'Total Measurement of CI Run: ' >> $GITHUB_STEP_SUMMARY
-        echo "🖥 avg. CPU utilization [%]:" >> $GITHUB_STEP_SUMMARY
-        awk '{ total += $1; count++ } END { print total/count }' /tmp/eco-ci/cpu-util-total.txt >> $GITHUB_STEP_SUMMARY
+        
+        avgCPU=awk '{ total += $1; count++ } END { print total/count }' /tmp/eco-ci/cpu-util-total.txt
+        echo "🖥 avg. CPU utilization [%]:$avgCPU" >> $GITHUB_STEP_SUMMARY
         
         echo "🔋 Total Energy [Joules] :" >> $GITHUB_STEP_SUMMARY
         total_energy=$(awk '{sum+=$1} END {print sum}' /tmp/eco-ci/energy-total.txt)
@@ -326,3 +327,6 @@ runs:
             echo "See energy runs here:" >> $GITHUB_STEP_SUMMARY
             echo "${metrics_url}/ci.html?repo=${repo_enc}&branch=${branch_enc}&workflow=$ECO_CI_WORKFLOW_ID" >> $GITHUB_STEP_SUMMARY
         fi
+
+        # store values as application/json
+        echo "values={\"avgCPU\": $avgCPU}" >> $GITHUB_OUTPUT
